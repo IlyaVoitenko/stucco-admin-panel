@@ -1,4 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import styles from "./styles.module.scss";
 import * as Yup from "yup";
 
 const loginSchema = Yup.object({
@@ -15,29 +16,46 @@ const loginSchema = Yup.object({
 });
 const Auth = () => {
   return (
-    <main>
+    <main className={styles.container}>
       <Formik
         initialValues={{ login: "", password: "" }}
         validationSchema={loginSchema}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           try {
             console.log("Logging in", values);
-          } catch (err: Error | any) {
-            setErrors({
-              login: "data is incorrect",
-              password: "data is incorrect",
-            });
+          } catch {
+            throw new Error("An error occurred during logins");
           } finally {
             setSubmitting(false);
           }
         }}
       >
         {({ handleSubmit, isSubmitting }) => (
-          <Form>
-            <Field type="text" required name="login" />
-            <ErrorMessage name="login" component="div" />
-            <Field type="password" required name="password" />
-            <ErrorMessage name="password" component="div" />
+          <Form className={styles.formContainer}>
+            <Field
+              type="text"
+              required
+              name="login"
+              className={styles.inputField}
+              placeholder="Login"
+            />
+            <ErrorMessage
+              name="login"
+              component="div"
+              className={styles.errorMessage}
+            />
+            <Field
+              type="password"
+              required
+              name="password"
+              className={styles.inputField}
+              placeholder="Password"
+            />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className={styles.errorMessage}
+            />
             <button
               type="submit"
               disabled={isSubmitting}
