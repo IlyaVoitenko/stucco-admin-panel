@@ -2,7 +2,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useNavigate } from "react-router";
 import styles from "./styles.module.scss";
 import * as Yup from "yup";
-import api from "../../service/auth";
+import { login } from "../../service/auth";
 
 const loginSchema = Yup.object({
   login: Yup.string()
@@ -25,10 +25,7 @@ const Auth = () => {
         validationSchema={loginSchema}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            await api.post(`${import.meta.env.VITE_APP_API_URL}auth/login`, {
-              username: values.login,
-              password: values.password,
-            });
+            await login({ login: values.login, password: values.password });
             navigate("/category");
           } catch {
             throw new Error("An error occurred during logins");
