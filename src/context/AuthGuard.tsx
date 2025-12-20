@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router";
+import { Outlet, Navigate } from "react-router-dom";
 import { IsLogged } from "../service/auth";
-
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+type responseType = {
+  data: {
+    auth: boolean;
+  };
+};
+const AuthGuard = () => {
   const [isAuthUser, setIsAuthUser] = useState<boolean | null>(null);
   useEffect(() => {
     const isAuth = async () => {
       try {
-        await IsLogged();
+        const response = (await IsLogged()) as responseType;
+        if (!response.data.auth) return setIsAuthUser(false);
         setIsAuthUser(true);
       } catch (error) {
         setIsAuthUser(false);
@@ -16,13 +21,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
     isAuth();
   }, []);
-  if (isAuthUser === null) return null; // или loader
-
-  if (!isAuthUser) {
-    return <Navigate to="/" replace />;
-  }
-
-  return <>{children}</>;
+  if (isAuthUser === null) return null;
+  return <>{isAuthUser ? <Outlet /> : <Navigate to={"/"} replace />}</>;
 };
 
-export default AuthProvider;
+export default AuthGuard;

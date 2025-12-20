@@ -1,6 +1,8 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Loading from "./components/Loading";
+
+import AuthGuard from "./context/AuthGuard";
 
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
@@ -11,8 +13,10 @@ function App() {
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/" element={<AuthPage />} />
-        <Route path="/category" element={<CategoryPage />} />
-        <Route path="/product" element={<ProductPage />} />
+        <Route element={<AuthGuard />}>
+          <Route path="/category" element={<CategoryPage />} />
+          <Route path="/product" element={<ProductPage />} />
+        </Route>
       </Routes>
     </Suspense>
   );
