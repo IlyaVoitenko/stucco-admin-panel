@@ -8,6 +8,7 @@ import AuthGuard from "./context/AuthGuard";
 const AuthPage = lazy(() => import("./pages/AuthPage"));
 const CreateCategoryPage = lazy(() => import("./pages/CreateCategoryPage"));
 const CategoryListPage = lazy(() => import("./pages/CategoryListPage"));
+const ProductsListPage = lazy(() => import("./pages/ProductsListPage"));
 const ProductPage = lazy(() => import("./pages/ProductPage"));
 
 function App() {
@@ -20,8 +21,16 @@ function App() {
             path={PAGES.CREATE_CATEGORY_PAGE}
             element={<CreateCategoryPage />}
           />
-          <Route path={PAGES.PRODUCTS_PAGE} element={<ProductPage />} />
+          <Route path={PAGES.PRODUCTS_PAGE} element={<ProductsListPage />} />
           <Route path={PAGES.CATEGORIES_PAGE} element={<CategoryListPage />} />
+          <Route
+            path={`${PAGES.CATEGORIES_PAGE}/:category-name`}
+            element={<CategoryListPage />}
+          />
+          <Route
+            path={`${PAGES.CATEGORIES_PAGE}/:category-name/:product`}
+            element={<ProductPage />}
+          />
         </Route>
       </Routes>
     </Suspense>

@@ -33,11 +33,8 @@ const useImages = ({
 
   const onChange = (fileList?: FileList | null) => {
     if (!fileList) return;
-    console.log("filelist :", fileList);
     const incoming = multiple ? Array.from(fileList) : [fileList[0]];
-    console.log("incoming", incoming);
     const valid: File[] = [];
-    console.log("valid", valid);
     for (const file of incoming) {
       const err = validateFile(file);
 

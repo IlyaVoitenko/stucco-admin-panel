@@ -3,11 +3,13 @@
 .container {
   @extend .pageContainer;
   gap: 2rem;
-
   .formContainer {
     @extend .containerForm;
   }
   .errorField {
     @extend .errorMessage;
+  }
+  .successMessage {
+    @extend .successMessage;
   }
 }

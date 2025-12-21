@@ -14,13 +14,15 @@ const addCategorySchema = Yup.object({
 
 const Category = () => {
   const image = useImages({ multiple: false });
-  const [addedCategory, setAddedCategory] = useState(null);
+  const [isAddedCategory, setIsAddedCategory] = useState<boolean>(false);
   const [error, setError] = useState<boolean | null>(null);
   return (
     <main className={styles.container}>
-      {addedCategory && <p>Category added successfully!</p>}
-      {error && <p>Error adding category</p>}
-      {image.previews && (
+      {isAddedCategory && (
+        <p className={styles.successMessage}>Category added successfully!</p>
+      )}
+      {error && <p className={styles.errorField}>Error adding category</p>}
+      {image.previews.length !== 0 && (
         <img
           src={image.previews[0]}
           className={styles.imagePreview}
@@ -30,15 +32,14 @@ const Category = () => {
       <Formik
         initialValues={{ name: "", image: null }}
         validationSchema={addCategorySchema}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
             const formData = new FormData();
-            formData.append("name", values.name);
             if (image.files) formData.append("image", image.files[0]);
-            console.log("values", values);
-            const response = await createNewCategory(formData);
-            console.log("response", response);
-            setAddedCategory(response.data);
+            if (values.name) formData.append("name", values.name);
+            await createNewCategory(formData);
+            setIsAddedCategory(true);
+            resetForm();
           } catch {
             setError(true);
             throw new Error("An error occurred during logins");
@@ -66,6 +67,7 @@ const Category = () => {
               type="file"
               onChange={(e) => {
                 const files = e.currentTarget.files;
+                console.log("files", files);
                 image.onChange(files);
                 if (files?.[0]) {
                   setFieldValue("image", files[0]);

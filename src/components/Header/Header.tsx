@@ -44,8 +44,8 @@ const Header = () => {
       </nav>
       <button
         className={styles.btnLogout}
-        onClick={async () => {
-          await logout();
+        onClick={() => {
+          logout();
           navigate(PAGES.AUTH_PAGE);
         }}
       >

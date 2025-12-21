@@ -21,6 +21,7 @@ export const login = async (data: { login: string; password: string }) => {
 };
 export const createNewCategory = async (data: FormData) => {
   try {
+    console.log("createNewCategory", data);
     const response = await api.post("categories", data);
     return response;
   } catch (error) {
@@ -32,12 +33,14 @@ export const IsLogged = async () => {
 };
 export const logout = async () => {
   try {
-    console.log("started");
-    const response = await api.patch(`auth/logout`);
-    console.log("done");
-
-    console.log(response);
-    return response;
+    await api.patch(`auth/logout`);
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+export const deleteCategory = async (id: number) => {
+  try {
+    await api.delete(`categories/${id}`);
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);
   }

@@ -1,11 +1,11 @@
-import Category from "../../components/Category";
+import CreateCategory from "../../components/CreateCategory";
 import Header from "../../components/Header";
 
 const CategoryPage = () => {
   return (
     <>
       <Header />
-      <Category />
+      <CreateCategory />
     </>
   );
 };
