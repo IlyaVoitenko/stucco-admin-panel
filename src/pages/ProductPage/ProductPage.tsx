@@ -1,5 +1,12 @@
+import Header from "../../components/Header";
+import Product from "../../components/Product";
 const ProductPage = () => {
-  return <main>ProductPage</main>;
+  return (
+    <>
+      <Header />
+      <Product />
+    </>
+  );
 };
 
 export default ProductPage;

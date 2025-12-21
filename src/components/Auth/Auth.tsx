@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.scss";
 import * as Yup from "yup";
 import { login } from "../../service/auth";
+import { PAGES } from "../../config/pages.config";
 
 const loginSchema = Yup.object({
   login: Yup.string()
@@ -26,7 +27,7 @@ const Auth = () => {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             await login({ login: values.login, password: values.password });
-            navigate("/category");
+            navigate(PAGES.CREATE_CATEGORY_PAGE);
           } catch {
             throw new Error("An error occurred during logins");
           } finally {

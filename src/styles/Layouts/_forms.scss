@@ -1,0 +1,18 @@
+.containerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.imagePreview {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+.inputField {
+  padding: 0.5rem;
+}
+.errorMessage {
+  color: rgba(255, 255, 255, 0.686);
+  background-color: rgba(255, 0, 0, 0.717);
+  font-size: 0.875rem;
+}

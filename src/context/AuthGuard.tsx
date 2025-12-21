@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { IsLogged } from "../service/auth";
-type responseType = {
-  data: {
-    auth: boolean;
-  };
-};
+import { PAGES } from "../config/pages.config";
+
 const AuthGuard = () => {
   const [isAuthUser, setIsAuthUser] = useState<boolean | null>(null);
   useEffect(() => {
     const isAuth = async () => {
       try {
-        const response = (await IsLogged()) as responseType;
-        if (!response.data.auth) return setIsAuthUser(false);
+        await IsLogged();
         setIsAuthUser(true);
       } catch (error) {
         setIsAuthUser(false);
@@ -22,7 +18,9 @@ const AuthGuard = () => {
     isAuth();
   }, []);
   if (isAuthUser === null) return null;
-  return <>{isAuthUser ? <Outlet /> : <Navigate to={"/"} replace />}</>;
+  return (
+    <>{isAuthUser ? <Outlet /> : <Navigate to={PAGES.AUTH_PAGE} replace />}</>
+  );
 };
 
 export default AuthGuard;

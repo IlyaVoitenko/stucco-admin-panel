@@ -1,0 +1,43 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 1rem;
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    .navList {
+      list-style: none;
+      display: flex;
+      gap: 16px;
+      padding: 0;
+
+      .navLink {
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .activeLink {
+        font-weight: bold;
+        text-decoration: underline;
+        color: gray;
+      }
+      .inactiveLink {
+        color: rgb(205, 205, 205);
+      }
+    }
+  }
+
+  .btnLogout {
+    background-color: #f10004ae;
+    color: rgba(255, 255, 255, 0.702);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ff04007d;
+    }
+  }
+}

@@ -1,37 +1,53 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.scss";
-import { api } from "../../service/auth";
+import { createNewCategory } from "../../service/auth";
 import useImages from "../hooks/useImages";
+import { useState } from "react";
 
 const addCategorySchema = Yup.object({
   name: Yup.string()
     .min(3, "minimum 3 characters")
     .required("name category is required"),
-  image: Yup.object().shape({}).required("image is required"),
+  image: Yup.mixed().required("image is required"),
 });
 
 const Category = () => {
   const image = useImages({ multiple: false });
+  const [addedCategory, setAddedCategory] = useState(null);
+  const [error, setError] = useState<boolean | null>(null);
   return (
     <main className={styles.container}>
+      {addedCategory && <p>Category added successfully!</p>}
+      {error && <p>Error adding category</p>}
+      {image.previews && (
+        <img
+          src={image.previews[0]}
+          className={styles.imagePreview}
+          alt="preview"
+        />
+      )}
       <Formik
-        initialValues={{ name: "", password: "" }}
+        initialValues={{ name: "", image: null }}
         validationSchema={addCategorySchema}
         onSubmit={async (values, { setSubmitting }) => {
           try {
-            await api.post(`${import.meta.env.VITE_APP_API_URL}auth/login`, {
-              name: values.name,
-              password: values.password,
-            });
+            const formData = new FormData();
+            formData.append("name", values.name);
+            if (image.files) formData.append("image", image.files[0]);
+            console.log("values", values);
+            const response = await createNewCategory(formData);
+            console.log("response", response);
+            setAddedCategory(response.data);
           } catch {
+            setError(true);
             throw new Error("An error occurred during logins");
           } finally {
             setSubmitting(false);
           }
         }}
       >
-        {({ handleSubmit, isSubmitting }) => (
+        {({ setFieldValue, isSubmitting }) => (
           <Form className={styles.formContainer}>
             <Field
               type="text"
@@ -43,25 +59,28 @@ const Category = () => {
             <ErrorMessage
               name="name"
               component="div"
-              className={styles.errorMessage}
+              className={styles.errorField}
             />
-            <Field
+
+            <input
               type="file"
-              required
-              name="image"
+              onChange={(e) => {
+                const files = e.currentTarget.files;
+                image.onChange(files);
+                if (files?.[0]) {
+                  setFieldValue("image", files[0]);
+                }
+              }}
+              accept="image/*"
               className={styles.inputField}
-              placeholder="image category"
+              placeholder="Image category"
             />
             <ErrorMessage
               name="image"
               component="div"
-              className={styles.errorMessage}
+              className={styles.errorField}
             />
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              onClick={() => handleSubmit()}
-            >
+            <button type="submit" disabled={isSubmitting}>
               Create category
             </button>
           </Form>
