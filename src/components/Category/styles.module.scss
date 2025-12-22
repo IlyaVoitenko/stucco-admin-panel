@@ -1,0 +1,17 @@
+@use "../../styles/Layouts/forms" as *;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 100vw;
+  gap: 2rem;
+
+  .formContainer {
+    @extend .containerForm;
+  }
+  .errorField {
+    @extend .errorMessage;
+  }
+}
