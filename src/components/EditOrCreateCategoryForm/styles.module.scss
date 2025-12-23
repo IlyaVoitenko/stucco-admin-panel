@@ -1,0 +1,13 @@
+@use "../../styles/Layouts/forms" as *;
+@use "../../styles/Layouts/pages" as *;
+.container {
+  .formContainer {
+    @extend .containerForm;
+  }
+  .errorField {
+    @extend .errorMessage;
+  }
+  .successMessage {
+    @extend .successMessage;
+  }
+}
