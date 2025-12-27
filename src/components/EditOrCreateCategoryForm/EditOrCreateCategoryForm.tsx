@@ -3,7 +3,7 @@ import useImages from "../hooks/useImages";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.scss";
-import { createNewCategory } from "../../service/auth";
+import { createNewCategory, updateCategory } from "../../service/auth";
 import type { modeFormsType } from "../../types";
 import { useCategory } from "../../store/category.store";
 
@@ -26,7 +26,14 @@ const EditOrCreateCategoryForm = ({
   const image = useImages({ multiple: false });
   const [isFetchSuccess, setIsFetchSuccess] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
-  const { name: categoryName, image: categoryImage } = useCategory.getState();
+  let controller: AbortController | null = null;
+
+  const {
+    id: categoryId,
+    name: categoryName,
+    image: categoryImage,
+  } = useCategory();
+
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
@@ -40,11 +47,19 @@ const EditOrCreateCategoryForm = ({
           alt="preview"
         />
       )}
+      {mode === "edit" && categoryImage && image.previews.length === 0 && (
+        <img
+          src={categoryImage}
+          className={styles.imagePreview}
+          alt="preview"
+        />
+      )}
       <Formik
+        enableReinitialize
         initialValues={
           mode === "create"
-            ? { name: "", image: null }
-            : { name: categoryName, image: categoryImage }
+            ? { name: "", image: undefined }
+            : { name: categoryName ?? "", image: categoryImage ?? undefined }
         }
         validationSchema={getSchema(mode)}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -55,7 +70,9 @@ const EditOrCreateCategoryForm = ({
             if (mode === "create") {
               await createNewCategory(formData);
             } else {
-              return;
+              if (!categoryId) throw new Error("Category ID is missing");
+              controller = new AbortController();
+              await updateCategory(categoryId, formData, controller.signal);
             }
             setIsFetchSuccess(true);
             resetForm();
@@ -85,7 +102,6 @@ const EditOrCreateCategoryForm = ({
               type="file"
               onChange={(e) => {
                 const files = e.currentTarget.files;
-                console.log("files", files);
                 image.onChange(files);
                 if (files?.[0]) {
                   setFieldValue("image", files[0]);
@@ -101,7 +117,7 @@ const EditOrCreateCategoryForm = ({
               className={styles.errorField}
             />
             <button type="submit" disabled={isSubmitting}>
-              Create category
+              {mode === "create" ? "Create category" : "Update category"}
             </button>
           </Form>
         )}

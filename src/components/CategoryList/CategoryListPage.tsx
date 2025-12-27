@@ -1,8 +1,9 @@
 import styles from "./styles.module.scss";
 import useFetch from "../../hook/useFetch";
 import CategoryCard from "../CategoryCard";
-import { useCallback, useState } from "react";
+import { Activity, useCallback, useState } from "react";
 import { useCategory } from "../../store/category.store";
+import EditModal from "../EditModal";
 interface CategoryProps {
   id: number;
   name: string;
@@ -28,7 +29,9 @@ const CategoryListPage = () => {
   if (error) return <p>Error loading categories</p>;
   return (
     <main className={styles.container}>
-      {isShow && <span>Category not found</span>}
+      <Activity mode={isShow ? "visible" : "hidden"}>
+        <EditModal mode="edit" setIsShow={setIsShow} />
+      </Activity>
       {!data?.length && <span>Category not found</span>}
       <ul className={styles.listCategories}>
         {data &&

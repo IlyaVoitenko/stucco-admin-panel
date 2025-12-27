@@ -19,34 +19,7 @@
     width: 220px;
     height: 270px;
   }
-  .btnDelete {
-    color: rgba(255, 255, 255, 0.763);
-    background-color: rgba(255, 0, 0, 0.552);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    right: 0;
 
-    &:hover {
-      background-color: rgba(145, 2, 2, 0.756);
-    }
-  }
-  .btnEdit {
-    color: white;
-    background-color: cornflowerblue;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    &:hover {
-      background-color: rgba(100, 148, 237, 0.692);
-    }
-  }
   .image {
     width: 200px;
     height: 250px;
@@ -54,5 +27,33 @@
   .fullSize {
     width: fit-content;
     height: revert-layer;
+  }
+}
+.btnDelete {
+  color: rgba(255, 255, 255, 0.763);
+  background-color: rgba(255, 0, 0, 0.552);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  &:hover {
+    background-color: rgba(145, 2, 2, 0.756);
+  }
+}
+.btnEdit {
+  color: white;
+  background-color: cornflowerblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &:hover {
+    background-color: rgba(100, 148, 237, 0.692);
   }
 }

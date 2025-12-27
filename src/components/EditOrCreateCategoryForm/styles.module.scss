@@ -1,6 +1,10 @@
 @use "../../styles/Layouts/forms" as *;
 @use "../../styles/Layouts/pages" as *;
 .container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   .formContainer {
     @extend .containerForm;
   }

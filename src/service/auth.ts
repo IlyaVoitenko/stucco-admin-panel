@@ -44,9 +44,15 @@ export const deleteCategory = async (id: number) => {
     throw new Error(`error status : ${error as Error}`);
   }
 };
-export const updateCategory = async (id: number) => {
+export const updateCategory = async (
+  id: number,
+  data: FormData,
+  signal: AbortSignal
+) => {
   try {
-    await api.patch(`categories/${id}`);
+    await api.patch(`categories/${id}`, data, {
+      signal,
+    });
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);
   }
