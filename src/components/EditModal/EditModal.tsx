@@ -1,12 +1,15 @@
 import EditOrCreateCategoryForm from "../EditOrCreateCategoryForm";
+import type { modeFormsType } from "../../types";
 interface EditModalProps {
-  isCreateForm: boolean;
+  mode: modeFormsType;
 }
 
-const EditModal = ({ isCreateForm }: EditModalProps) => {
-  <main>
-    <EditOrCreateCategoryForm isCreateForm={isCreateForm} />
-  </main>;
+const EditModal = ({ mode }: EditModalProps) => {
+  return (
+    <main>
+      <EditOrCreateCategoryForm mode={mode} />
+    </main>
+  );
 };
 
 export default EditModal;

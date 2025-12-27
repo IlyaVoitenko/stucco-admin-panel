@@ -4,24 +4,29 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.scss";
 import { createNewCategory } from "../../service/auth";
+import type { modeFormsType } from "../../types";
+import { useCategory } from "../../store/category.store";
 
 interface EditOrCreateCategoryFormProps {
-  isCreateForm?: boolean;
+  mode?: modeFormsType;
 }
 
-const addCategorySchema = Yup.object({
-  name: Yup.string()
-    .min(3, "minimum 3 characters")
-    .required("name category is required"),
-  image: Yup.mixed().required("image is required"),
-});
+const getSchema = (mode: modeFormsType) =>
+  Yup.object({
+    name: Yup.string().min(3).required(),
+    image:
+      mode === "create"
+        ? Yup.mixed().required("image is required")
+        : Yup.mixed().nullable(),
+  });
 
 const EditOrCreateCategoryForm = ({
-  isCreateForm = true,
+  mode = "create",
 }: EditOrCreateCategoryFormProps) => {
   const image = useImages({ multiple: false });
   const [isFetchSuccess, setIsFetchSuccess] = useState<boolean>(false);
-  const [error, setError] = useState<boolean | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const { name: categoryName, image: categoryImage } = useCategory.getState();
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
@@ -36,23 +41,26 @@ const EditOrCreateCategoryForm = ({
         />
       )}
       <Formik
-        initialValues={{ name: "", image: null }}
-        validationSchema={addCategorySchema}
+        initialValues={
+          mode === "create"
+            ? { name: "", image: null }
+            : { name: categoryName, image: categoryImage }
+        }
+        validationSchema={getSchema(mode)}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
             const formData = new FormData();
             if (image.files) formData.append("image", image.files[0]);
             if (values.name) formData.append("name", values.name);
-            if (isCreateForm) {
+            if (mode === "create") {
               await createNewCategory(formData);
             } else {
               return;
             }
             setIsFetchSuccess(true);
             resetForm();
-          } catch {
-            setError(true);
-            throw new Error("An error occurred during logins");
+          } catch (error) {
+            setError(error as Error);
           } finally {
             setSubmitting(false);
           }

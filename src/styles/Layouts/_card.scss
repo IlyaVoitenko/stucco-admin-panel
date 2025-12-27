@@ -7,8 +7,14 @@
   height: 250px;
   padding: 10px;
   cursor: pointer;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.649);
   transition: width 0.7s ease, height 0.7s ease, box-shadow 0.3s ease;
   position: relative;
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
   &:hover {
     width: 220px;
     height: 270px;
@@ -29,7 +35,7 @@
   }
   .btnEdit {
     color: white;
-    background-color: rgba(9, 135, 2, 0.699);
+    background-color: cornflowerblue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,7 +44,7 @@
     left: 0;
 
     &:hover {
-      background-color: rgba(11, 219, 0, 0.297);
+      background-color: rgba(100, 148, 237, 0.692);
     }
   }
   .image {
@@ -46,7 +52,7 @@
     height: 250px;
   }
   .fullSize {
-    width: inherit;
-    height: auto;
+    width: fit-content;
+    height: revert-layer;
   }
 }

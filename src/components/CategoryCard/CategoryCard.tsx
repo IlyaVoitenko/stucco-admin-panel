@@ -3,7 +3,7 @@ import { PAGES } from "../../config/pages.config";
 import styles from "./styles.module.scss";
 import { additionalStyles } from "./constants";
 import { deleteCategory } from "../../service/auth";
-import { useCategory } from "../../store/category.store";
+import { memo } from "react";
 
 interface CategoryProps {
   item: {
@@ -11,24 +11,29 @@ interface CategoryProps {
     name: string;
     image: string;
   };
+  handleSelectCategory: (category: CategoryProps["item"]) => void;
 }
-const CategoryCard = ({ item }: CategoryProps) => {
+const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
   const { name, image, id } = item;
-  const hasAdditionalStyle = name in additionalStyles;
-  const selectedCategory = useCategory().setSelectedCategory;
+  const hasAdditionalStyle =
+    name in additionalStyles
+      ? additionalStyles[name as keyof typeof additionalStyles]
+      : false;
 
   return (
-    <Link to={`${PAGES.CATEGORIES_PAGE}/${name.toLowerCase()}`}>
-      <div className={styles.container}>
-        <button
-          className={styles.btnEdit}
-          onClick={() => selectedCategory({ name, image, id })}
-        >
-          &#9998;
-        </button>
-        <button className={styles.btnDelete} onClick={() => deleteCategory(id)}>
-          X
-        </button>
+    <div className={styles.container}>
+      <button
+        className={styles.btnEdit}
+        onClick={() => {
+          handleSelectCategory({ name, image, id });
+        }}
+      >
+        &#9998;
+      </button>
+      <button className={styles.btnDelete} onClick={() => deleteCategory(id)}>
+        X
+      </button>
+      <Link to={`${PAGES.CATEGORIES_PAGE}/${name.toLowerCase()}`}>
         <img
           src={image}
           className={`${styles.image} ${
@@ -39,9 +44,9 @@ const CategoryCard = ({ item }: CategoryProps) => {
           height={100}
         />
         <h2> {name}</h2>
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
-};
+});
 
 export default CategoryCard;

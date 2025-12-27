@@ -4,9 +4,11 @@
   gap: 2rem;
 
   .listCategories {
+    width: 100%;
     display: flex;
     list-style: none;
     justify-content: space-evenly;
+    align-items: center;
     gap: 1rem;
   }
 }
