@@ -12,6 +12,8 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Auth
 export const login = async (data: { login: string; password: string }) => {
   const response = await api.post(`auth/login`, {
     username: data.login,
@@ -19,20 +21,21 @@ export const login = async (data: { login: string; password: string }) => {
   });
   return response;
 };
-export const createNewCategory = async (data: FormData) => {
-  try {
-    const response = await api.post("categories", data);
-    return response;
-  } catch (error) {
-    throw new Error(`error status : ${error as Error}`);
-  }
-};
 export const IsLogged = async () => {
   await api.get("auth/is-logged-in");
 };
 export const logout = async () => {
   try {
     await api.patch(`auth/logout`);
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+// Categories
+export const createNewCategory = async (data: FormData) => {
+  try {
+    const response = await api.post("categories", data);
+    return response;
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);
   }
@@ -53,6 +56,20 @@ export const updateCategory = async (
     await api.patch(`categories/${id}`, data, {
       signal,
     });
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+// Products
+export const productsByCategory = async (
+  categoryName: string,
+  signal: AbortSignal
+) => {
+  try {
+    const response = await api.get(`products/all/${categoryName}`, {
+      signal,
+    });
+    return response;
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);
   }

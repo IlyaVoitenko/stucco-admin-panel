@@ -1,0 +1,10 @@
+@use "../../styles/Layouts/pages" as *;
+.container {
+  @extend .pageContainer;
+  gap: 2rem;
+
+  .errorMessage {
+    font-size: 1.5rem;
+    color: rgba(255, 0, 0, 0.567);
+  }
+}

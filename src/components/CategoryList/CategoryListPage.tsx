@@ -1,9 +1,10 @@
 import styles from "./styles.module.scss";
-import useFetch from "../../hook/useFetch";
+import useFetch from "../../hooks/useFetch";
 import CategoryCard from "../CategoryCard";
 import { Activity, useCallback, useState } from "react";
 import { useCategory } from "../../store/category.store";
 import EditModal from "../EditModal";
+import ErrorComponent from "../ErrorComponent";
 interface CategoryProps {
   id: number;
   name: string;
@@ -26,7 +27,7 @@ const CategoryListPage = () => {
   });
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error loading categories</p>;
+  if (error) return <ErrorComponent error={error} />;
   return (
     <main className={styles.container}>
       <Activity mode={isShow ? "visible" : "hidden"}>

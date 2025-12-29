@@ -1,5 +1,5 @@
 import { useState } from "react";
-import useImages from "../hooks/useImages";
+import useImages from "../../hooks/useImages";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.scss";

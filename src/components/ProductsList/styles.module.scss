@@ -1,0 +1,8 @@
+@use "../../styles/Layouts/pages" as *;
+
+.container {
+  @extend .pageContainer;
+  justify-content: flex-start;
+  padding-top: 3rem;
+  gap: 2rem;
+}

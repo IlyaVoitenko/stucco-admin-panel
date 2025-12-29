@@ -20,16 +20,7 @@ const Header = () => {
           >
             <li className={styles.navItem}>List categories</li>
           </Link>
-          <Link
-            to={PAGES.PRODUCTS_PAGE}
-            className={`${styles.navLink} ${
-              currentRoute === PAGES.PRODUCTS_PAGE
-                ? styles.activeLink
-                : styles.inactiveLink
-            }`}
-          >
-            <li className={styles.navItem}>Products</li>
-          </Link>
+
           <Link
             to={PAGES.CREATE_CATEGORY_PAGE}
             className={`${styles.navLink} ${

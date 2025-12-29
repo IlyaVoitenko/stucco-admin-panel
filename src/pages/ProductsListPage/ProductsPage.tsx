@@ -1,12 +1,12 @@
 import Header from "../../components/Header";
-import Product from "../../components/Product";
-const ProductPage = () => {
+import ProductsList from "../../components/ProductsList";
+const ProductsPage = () => {
   return (
     <>
       <Header />
-      <Product />
+      <ProductsList />
     </>
   );
 };
 
-export default ProductPage;
+export default ProductsPage;

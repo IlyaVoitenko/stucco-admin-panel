@@ -24,11 +24,11 @@ function App() {
           <Route path={PAGES.PRODUCTS_PAGE} element={<ProductsListPage />} />
           <Route path={PAGES.CATEGORIES_PAGE} element={<CategoryListPage />} />
           <Route
-            path={`${PAGES.CATEGORIES_PAGE}/:category-name`}
-            element={<CategoryListPage />}
+            path={`${PAGES.CATEGORIES_PAGE}/:categoryName`}
+            element={<ProductsListPage />}
           />
           <Route
-            path={`${PAGES.CATEGORIES_PAGE}/:category-name/:product`}
+            path={`${PAGES.CATEGORIES_PAGE}/:categoryName/:product`}
             element={<ProductPage />}
           />
         </Route>
