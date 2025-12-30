@@ -33,7 +33,12 @@ const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
       <button className={styles.btnDelete} onClick={() => deleteCategory(id)}>
         X
       </button>
-      <Link to={`${PAGES.CATEGORIES_PAGE}/${name.toLowerCase()}`}>
+      <Link
+        to={`${PAGES.CATEGORIES_PAGE}/${name.toLowerCase()}`}
+        onClick={() => {
+          handleSelectCategory({ name, image, id });
+        }}
+      >
         <img
           src={image}
           className={`${styles.image} ${

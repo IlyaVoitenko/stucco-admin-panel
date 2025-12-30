@@ -3,9 +3,17 @@
   flex-wrap: wrap;
   justify-content: center;
   width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   gap: 2rem;
+
+  .title {
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.644);
+    margin: 1rem 0;
+  }
   .containerCard {
     display: flex;
     flex-direction: column;

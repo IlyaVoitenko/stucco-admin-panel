@@ -1,12 +1,14 @@
 import EditOrCreateCategoryForm from "../EditOrCreateCategoryForm";
-import type { modeFormsType } from "../../types";
+import EditOrCreateProductForm from "../EditOrCreateProductForm";
+import type { entityTypes, modeFormsType } from "../../types";
 import styles from "./styles.module.scss";
 interface EditModalProps {
   mode: modeFormsType;
+  formMode?: entityTypes;
   setIsShow?: (value: boolean) => void;
 }
 
-const EditModal = ({ mode, setIsShow }: EditModalProps) => {
+const EditModal = ({ mode, setIsShow, formMode }: EditModalProps) => {
   return (
     <main className={styles.containerModal}>
       <button
@@ -17,7 +19,8 @@ const EditModal = ({ mode, setIsShow }: EditModalProps) => {
       >
         ×
       </button>
-      <EditOrCreateCategoryForm mode={mode} />
+      {formMode === "category" && <EditOrCreateCategoryForm mode={mode} />}
+      {formMode === "product" && <EditOrCreateProductForm mode={mode} />}
     </main>
   );
 };

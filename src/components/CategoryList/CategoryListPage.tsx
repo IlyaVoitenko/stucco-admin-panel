@@ -25,13 +25,13 @@ const CategoryListPage = () => {
   const { data, loading, error } = useFetch<CategoryProps[]>({
     url: "categories",
   });
-
+  console.log(data, loading, error);
   if (loading) return <p>Loading...</p>;
   if (error) return <ErrorComponent error={error} />;
   return (
     <main className={styles.container}>
       <Activity mode={isShow ? "visible" : "hidden"}>
-        <EditModal mode="edit" setIsShow={setIsShow} />
+        <EditModal mode="edit" formMode="category" setIsShow={setIsShow} />
       </Activity>
       {!data?.length && <span>Category not found</span>}
       <ul className={styles.listCategories}>
