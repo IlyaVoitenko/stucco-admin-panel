@@ -4,17 +4,15 @@ import styles from "./styles.module.scss";
 import { additionalStyles } from "./constants";
 import { deleteCategory } from "../../service/auth";
 import { memo } from "react";
+import type { Category } from "../../types";
 
 interface CategoryProps {
-  item: {
-    id: number;
-    name: string;
-    image: string;
-  };
+  item: Category;
   handleSelectCategory: (category: CategoryProps["item"]) => void;
 }
 const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
   const { name, image, id } = item;
+  if (!name) return null;
   const hasAdditionalStyle =
     name in additionalStyles
       ? additionalStyles[name as keyof typeof additionalStyles]
@@ -30,17 +28,23 @@ const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
       >
         &#9998;
       </button>
-      <button className={styles.btnDelete} onClick={() => deleteCategory(id)}>
+      <button
+        className={styles.btnDelete}
+        onClick={() => {
+          if (id !== null) return deleteCategory(id);
+          return;
+        }}
+      >
         X
       </button>
       <Link
-        to={`${PAGES.CATEGORIES_PAGE}/${name.toLowerCase()}`}
+        to={`${PAGES.CATEGORIES_PAGE}/${name ? name.toLowerCase() : ""}`}
         onClick={() => {
           handleSelectCategory({ name, image, id });
         }}
       >
         <img
-          src={image}
+          src={image ? image : ""}
           className={`${styles.image} ${
             hasAdditionalStyle ? styles.fullSize : ""
           }`}

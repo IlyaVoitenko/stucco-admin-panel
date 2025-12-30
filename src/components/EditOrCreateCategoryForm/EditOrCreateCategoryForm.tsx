@@ -14,6 +14,10 @@ interface EditOrCreateCategoryFormProps {
 const getSchema = (mode: modeFormsType) =>
   Yup.object({
     name: Yup.string().min(3).required(),
+    hasWidth: Yup.boolean().optional(),
+    hasHeight: Yup.boolean().optional(),
+    hasDepth: Yup.boolean().optional(),
+    hasDiameter: Yup.boolean().optional(),
     image:
       mode === "create"
         ? Yup.mixed().required("image is required")
@@ -32,6 +36,10 @@ const EditOrCreateCategoryForm = ({
     id: categoryId,
     name: categoryName,
     image: categoryImage,
+    hasWidth,
+    hasHeight,
+    hasDepth,
+    hasDiameter,
   } = useCategory();
 
   return (
@@ -58,8 +66,22 @@ const EditOrCreateCategoryForm = ({
         enableReinitialize
         initialValues={
           mode === "create"
-            ? { name: "", image: undefined }
-            : { name: categoryName ?? "", image: categoryImage ?? undefined }
+            ? {
+                name: "",
+                image: undefined,
+                hasWidth: false,
+                hasHeight: false,
+                hasDepth: false,
+                hasDiameter: false,
+              }
+            : {
+                name: categoryName ?? "",
+                image: categoryImage ?? undefined,
+                hasWidth,
+                hasHeight,
+                hasDepth,
+                hasDiameter,
+              }
         }
         validationSchema={getSchema(mode)}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -116,6 +138,26 @@ const EditOrCreateCategoryForm = ({
               component="div"
               className={styles.errorField}
             />
+            <label>
+              <Field type="checkbox" name="hasWidth" />
+              Width
+            </label>
+
+            <label>
+              <Field type="checkbox" name="hasHeight" />
+              Height
+            </label>
+
+            <label>
+              <Field type="checkbox" name="hasDepth" />
+              Depth
+            </label>
+
+            <label>
+              <Field type="checkbox" name="hasDiameter" />
+              Diameter
+            </label>
+
             <button type="submit" disabled={isSubmitting}>
               {mode === "create" ? "Create category" : "Update category"}
             </button>

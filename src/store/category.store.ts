@@ -1,25 +1,18 @@
 import { create } from "zustand";
+import type { Category } from "../types";
 
-interface CategoryState {
-  image: string | null;
-  name: string | null;
-  id: number | null;
-
-  setSelectedCategory: (value: {
-    image: string | null;
-    name: string | null;
-    id: number | null;
-  }) => void;
+interface CategoryState extends Category {
+  setSelectedCategory: (value: Category) => void;
 }
 
 export const useCategory = create<CategoryState>((set) => ({
+  hasWidth: false,
+  hasHeight: false,
+  hasDepth: false,
+  hasDiameter: false,
   image: null,
   name: null,
   id: null,
 
-  setSelectedCategory: (value: {
-    image: string | null;
-    name: string | null;
-    id: number | null;
-  }) => set({ image: value.image, name: value.name, id: value.id }),
+  setSelectedCategory: (value: Category) => set({ ...value }),
 }));

@@ -38,15 +38,15 @@ const getSchema = (mode: modeFormsType) =>
         ? Yup.mixed().required("image is required")
         : Yup.mixed().nullable(),
   });
+
 const productInitialValues: Product = {
   nameProduct: "",
   description: "",
   images: [],
   material: "",
-  dimensions: "",
   price: 0,
   sku: "", // stock keeping unit
-  type: "",
+  type: "piece", // piece, meter
   categoryId: null,
   sizes: null,
 };
