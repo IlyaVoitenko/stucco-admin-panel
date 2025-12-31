@@ -5,6 +5,7 @@ import { Activity, useCallback, useState } from "react";
 import { useCategory } from "../../store/category.store";
 import EditModal from "../EditModal";
 import ErrorComponent from "../ErrorComponent";
+import CardsSkeleton from "../CardsSkeleton";
 interface CategoryProps {
   id: number;
   name: string;
@@ -25,8 +26,8 @@ const CategoryListPage = () => {
   const { data, loading, error } = useFetch<CategoryProps[]>({
     url: "categories",
   });
-  console.log(data, loading, error);
-  if (loading) return <p>Loading...</p>;
+  console.log("data, loading, error:", data, loading, error);
+  if (loading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   return (
     <main className={styles.container}>
