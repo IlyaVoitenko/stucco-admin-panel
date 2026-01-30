@@ -6,27 +6,22 @@ import { useCategory } from "../../store/category.store";
 import EditModal from "../EditModal";
 import ErrorComponent from "../ErrorComponent";
 import CardsSkeleton from "../CardsSkeleton";
-interface CategoryProps {
-  id: number;
-  name: string;
-  image: string;
-}
+import type { Category } from "../../types";
 
 const CategoryListPage = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const setSelectedCategory = useCategory().setSelectedCategory;
 
   const handleSelectCategory = useCallback(
-    (category: CategoryProps) => {
+    (category: Category) => {
       setSelectedCategory(category);
       setIsShow(true);
     },
     [setSelectedCategory, setIsShow]
   );
-  const { data, loading, error } = useFetch<CategoryProps[]>({
+  const { data, loading, error } = useFetch<Category[]>({
     url: "categories",
   });
-  console.log("data, loading, error:", data, loading, error);
   if (loading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   return (
@@ -37,7 +32,7 @@ const CategoryListPage = () => {
       {!data?.length && <span>Category not found</span>}
       <ul className={styles.listCategories}>
         {data &&
-          data.map((item: CategoryProps) => (
+          data.map((item: Category) => (
             <li key={item.id}>
               <CategoryCard
                 item={item}

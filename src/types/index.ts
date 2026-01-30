@@ -1,12 +1,14 @@
 export type modeFormsType = "create" | "edit";
 export type entityTypes = "category" | "product";
+export type typesProduct = "piece" | "meter";
 
 export interface PieceSize {
-  width?: number;
-  height?: number;
-  depth?: number;
-  diameter?: number;
-  itemPrice?: number;
+  id: number | null;
+  width?: number | null | string;
+  height?: number | null | string;
+  depth?: number | null | string;
+  diameter?: number | null | string;
+  itemPrice?: number | null | string;
 }
 export interface Category {
   id: number | null;
@@ -18,13 +20,14 @@ export interface Category {
   hasDiameter?: boolean;
 }
 export interface Product {
+  id: number | null;
   nameProduct: string;
   description: string;
   images: string[];
   material: string;
   price: number;
   sku?: string; // stock keeping unit
-  type: "piece" | "meter"; // piece, meter
+  type: typesProduct; // piece, meter
   categoryId: number | null;
   sizes?: PieceSize[] | null;
 }

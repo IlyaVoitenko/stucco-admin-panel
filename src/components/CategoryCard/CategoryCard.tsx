@@ -11,11 +11,10 @@ interface CategoryProps {
   handleSelectCategory: (category: CategoryProps["item"]) => void;
 }
 const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
-  const { name, image, id } = item;
-  if (!name) return null;
+  if (!item.name) return null;
   const hasAdditionalStyle =
-    name in additionalStyles
-      ? additionalStyles[name as keyof typeof additionalStyles]
+    item.name in additionalStyles
+      ? additionalStyles[item.name as keyof typeof additionalStyles]
       : false;
 
   return (
@@ -23,7 +22,7 @@ const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
       <button
         className={styles.btnEdit}
         onClick={() => {
-          handleSelectCategory({ name, image, id });
+          handleSelectCategory({ ...item });
         }}
       >
         &#9998;
@@ -31,20 +30,22 @@ const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
       <button
         className={styles.btnDelete}
         onClick={() => {
-          if (id !== null) return deleteCategory(id);
+          if (item.id !== null) return deleteCategory(item.id);
           return;
         }}
       >
         X
       </button>
       <Link
-        to={`${PAGES.CATEGORIES_PAGE}/${name ? name.toLowerCase() : ""}`}
+        to={`${PAGES.CATEGORIES_PAGE}/${
+          item.name ? item.name.toLowerCase() : ""
+        }`}
         onClick={() => {
-          handleSelectCategory({ name, image, id });
+          handleSelectCategory({ ...item });
         }}
       >
         <img
-          src={image ? image : ""}
+          src={item.image ? item.image : ""}
           className={`${styles.image} ${
             hasAdditionalStyle ? styles.fullSize : ""
           }`}
@@ -52,7 +53,7 @@ const CategoryCard = memo(({ item, handleSelectCategory }: CategoryProps) => {
           width={100}
           height={100}
         />
-        <h2> {name}</h2>
+        <h2> {item.name}</h2>
       </Link>
     </div>
   );

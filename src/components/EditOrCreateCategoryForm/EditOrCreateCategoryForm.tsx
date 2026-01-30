@@ -89,7 +89,6 @@ const EditOrCreateCategoryForm = ({
             const formData = new FormData();
             if (image.files) formData.append("image", image.files[0]);
             if (values.name) formData.append("name", values.name);
-            console.log("values", values, values.hasHeight ? "true" : "false");
             formData.append("hasWidth", values.hasWidth ? "true" : "false");
             formData.append("hasHeight", values.hasHeight ? "true" : "false");
             formData.append("hasDepth", values.hasDepth ? "true" : "false");
@@ -97,7 +96,6 @@ const EditOrCreateCategoryForm = ({
               "hasDiameter",
               values.hasDiameter ? "true" : "false"
             );
-            console.log("formData", formData);
             if (mode === "create") {
               await createNewCategory(formData);
             } else {

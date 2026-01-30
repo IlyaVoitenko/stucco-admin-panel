@@ -50,7 +50,7 @@ export const deleteCategory = async (id: number) => {
 export const updateCategory = async (
   id: number,
   data: FormData,
-  signal: AbortSignal
+  signal: AbortSignal,
 ) => {
   try {
     await api.patch(`categories/${id}`, data, {
@@ -62,13 +62,33 @@ export const updateCategory = async (
 };
 // Products
 export const productsByCategory = async (
-  categoryName: string,
-  signal: AbortSignal
+  categoryId: string,
+  signal: AbortSignal,
 ) => {
   try {
-    const response = await api.get(`products/all/${categoryName}`, {
+    const response = await api.get(`products/all/${categoryId}`, {
       signal,
     });
+    return response;
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+export const createNewProductByCategory = async (data: FormData) => {
+  try {
+    const response = await api.post("products", data);
+    return response;
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+export const updateProductByCategory = async (
+  id: number,
+  signal: AbortSignal,
+  data: FormData,
+) => {
+  try {
+    const response = await api.patch(`products/${id}`, data, { signal });
     return response;
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);

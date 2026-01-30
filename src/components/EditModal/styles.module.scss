@@ -11,6 +11,7 @@
   z-index: 1000;
   height: 50%;
   width: 50%;
+  min-height: 600px;
   border-radius: 8px;
   .btnDelete {
     @extend .btnDelete;
