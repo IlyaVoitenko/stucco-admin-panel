@@ -11,7 +11,6 @@ type ProductCardProps = {
 };
 
 const ProductCard = memo(({ item, handleSelectProduct }: ProductCardProps) => {
-  console.log(item);
   return (
     <div className={styles.container}>
       <button

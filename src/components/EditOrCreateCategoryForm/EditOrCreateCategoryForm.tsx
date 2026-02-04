@@ -94,7 +94,7 @@ const EditOrCreateCategoryForm = ({
             formData.append("hasDepth", values.hasDepth ? "true" : "false");
             formData.append(
               "hasDiameter",
-              values.hasDiameter ? "true" : "false"
+              values.hasDiameter ? "true" : "false",
             );
             if (mode === "create") {
               await createNewCategory(formData);
@@ -109,6 +109,8 @@ const EditOrCreateCategoryForm = ({
             setError(error as Error);
           } finally {
             setSubmitting(false);
+            setError(null);
+            setIsFetchSuccess(false);
           }
         }}
       >

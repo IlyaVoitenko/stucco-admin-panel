@@ -29,7 +29,6 @@ const ProductsList = () => {
     },
     [setSelectedProduct, setIsShow],
   );
-  console.log("id", id);
   useEffect(() => {
     if (!id) return;
 
@@ -37,13 +36,10 @@ const ProductsList = () => {
 
     (async () => {
       try {
-        console.log("start");
         setIsLoading(true);
         const response = await productsByCategory(id, controller.signal);
-        console.log("response", response.data);
         setListProducts(response.data);
       } catch (e) {
-        console.log(e);
         if (axios.isCancel(e) || e.code === "ERR_CANCELED") return;
         setError(e as Error);
       } finally {
@@ -61,7 +57,6 @@ const ProductsList = () => {
   if (!hasWidth && !hasHeight && !hasDepth && !hasDiameter) {
     return <Navigate to={PAGES.CATEGORIES_PAGE} replace />;
   }
-  console.log("first", listProducts);
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Products in {categoryName}</h2>

@@ -33,3 +33,15 @@
   padding: 0.5rem;
   border-radius: 7px;
 }
+.deleteButton {
+  background-color: #a10000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.deleteButton:hover {
+  background-color: #720000;
+}

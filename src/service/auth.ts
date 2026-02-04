@@ -65,13 +65,9 @@ export const productsByCategory = async (
   categoryId: number,
   signal: AbortSignal,
 ) => {
-  console.log("start 11");
   const response = await api.get(`products/all/${categoryId}`, {
     signal,
   });
-  console.log("response", response);
-
-  console.log("response", response.data);
   return response;
 };
 export const createNewProductByCategory = async (data: FormData) => {

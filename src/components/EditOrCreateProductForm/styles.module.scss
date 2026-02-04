@@ -11,4 +11,7 @@
   .successMessage {
     @extend .successMessage;
   }
+  .deleteButton {
+    @extend .deleteButton;
+  }
 }
