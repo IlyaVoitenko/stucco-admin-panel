@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { Activity, useCallback, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import ErrorComponent from "../ErrorComponent";
 import CardsSkeleton from "../CardsSkeleton";
 import { productsByCategory } from "../../service/auth";
-import { redirect, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import type { Product } from "../../types";
 import { useCategory } from "../../store/category.store";
 import { PAGES } from "../../config/pages.config";
 import EditModal from "../EditModal";
 import { useProduct } from "../../store/product.store";
 import ProductCard from "../ProductCard/ProductCard";
+import axios from "axios";
 
 const ProductsList = () => {
   const { categoryName } = useParams();
@@ -21,8 +22,6 @@ const ProductsList = () => {
   const setListProducts = useProduct().setListProducts;
   const setSelectedProduct = useProduct().setSelectedProduct;
 
-  if (!hasWidth && !hasHeight && !hasDepth && !hasDiameter)
-    redirect(PAGES.CATEGORIES_PAGE);
   const handleSelectProduct = useCallback(
     (product: Product) => {
       setSelectedProduct(product);
@@ -30,31 +29,39 @@ const ProductsList = () => {
     },
     [setSelectedProduct, setIsShow],
   );
+  console.log("id", id);
   useEffect(() => {
+    if (!id) return;
+
     const controller = new AbortController();
-    const load = async () => {
+
+    (async () => {
       try {
+        console.log("start");
         setIsLoading(true);
-        if (!id) return;
         const response = await productsByCategory(id, controller.signal);
+        console.log("response", response.data);
         setListProducts(response.data);
-      } catch (error) {
-        if (
-          error instanceof Error &&
-          error.message === "error status : CanceledError: canceled"
-        )
-          return;
-        setError(error as Error);
+      } catch (e) {
+        console.log(e);
+        if (axios.isCancel(e) || e.code === "ERR_CANCELED") return;
+        setError(e as Error);
       } finally {
         setIsLoading(false);
       }
+    })();
+
+    return () => {
+      controller.abort();
     };
-    load();
-    return () => controller.abort();
-  }, [categoryName, id]);
+  }, [id, setListProducts]);
 
   if (isLoading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
+  if (!hasWidth && !hasHeight && !hasDepth && !hasDiameter) {
+    return <Navigate to={PAGES.CATEGORIES_PAGE} replace />;
+  }
+  console.log("first", listProducts);
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Products in {categoryName}</h2>
@@ -65,10 +72,10 @@ const ProductsList = () => {
       >
         Create a new product
       </button>
-      {isShow && (
-        <EditModal mode="create" formMode="product" setIsShow={setIsShow} />
-      )}
-      <div>
+      <Activity mode={isShow ? "visible" : "hidden"}>
+        <EditModal mode="edit" formMode="product" setIsShow={setIsShow} />
+      </Activity>
+      <ul className={styles.listProducts}>
         {listProducts.length ? (
           listProducts.map((product: Product) => (
             <li key={product.id}>
@@ -81,7 +88,7 @@ const ProductsList = () => {
         ) : (
           <div>No products found</div>
         )}
-      </div>
+      </ul>
     </div>
   );
 };

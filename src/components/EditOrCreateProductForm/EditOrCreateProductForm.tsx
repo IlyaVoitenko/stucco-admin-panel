@@ -54,13 +54,23 @@ const productInitialValues: Product = {
   sizes: [
     {
       id: 0,
-      width: "",
-      height: "",
-      depth: "",
-      diameter: "",
-      itemPrice: "",
+      width: null,
+      height: null,
+      depth: null,
+      diameter: null,
+      itemPrice: null,
     },
   ],
+};
+const normalizedSizes = (values: Product) => {
+  if (!values.sizes) return [];
+  return values.sizes.map((size: PieceSize) => ({
+    width: size.width === "" ? null : Number(size.width),
+    height: size.height === "" ? null : Number(size.height),
+    depth: size.depth === "" ? null : Number(size.depth),
+    diameter: size.diameter === "" ? null : Number(size.diameter),
+    itemPrice: size.itemPrice === "" ? null : Number(size.itemPrice),
+  }));
 };
 
 const EditOrCreateProductForm = ({
@@ -71,7 +81,7 @@ const EditOrCreateProductForm = ({
   const [error, setError] = useState<Error | null>(null);
   const {
     id: productId,
-    nameProduct,
+    name,
     description,
     images,
     material,
@@ -83,22 +93,24 @@ const EditOrCreateProductForm = ({
   } = useProduct();
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   let controller: AbortController | null = null;
-  console.log(id);
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
         <p className={styles.successMessage}>Category added successfully!</p>
       )}
       {error && <p className={styles.errorField}>Error adding category</p>}
-      {image.previews.length !== 0 && (
-        <img
-          src={image.previews[0]}
-          className={styles.imagePreview}
-          alt="preview"
-        />
-      )}
+      {mode === "create" &&
+        images.length !== 0 &&
+        images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            className={styles.imagePreview}
+            alt="preview"
+          />
+        ))}
       {mode === "edit" &&
-        nameProduct &&
+        name &&
         image.previews.length === 0 &&
         images.map((image) => (
           <img src={image} className={styles.imagePreview} alt="preview" />
@@ -109,7 +121,7 @@ const EditOrCreateProductForm = ({
           mode === "create"
             ? { ...productInitialValues, productId }
             : {
-                nameProduct: nameProduct ?? "",
+                name: name ?? "",
                 image: images ?? undefined,
                 description,
                 material,
@@ -117,16 +129,15 @@ const EditOrCreateProductForm = ({
                 sku,
                 type,
                 categoryId,
-                sizes,
+                sizes: sizes ?? [],
               }
         }
         validationSchema={getSchema(mode)}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            alert("submit");
             const formData = new FormData();
             if (image.files) formData.append("image", image.files[0]);
-            if (values.nameProduct) formData.append("name", values.nameProduct);
+            if (values.name) formData.append("name", values.name);
             if (values.description)
               formData.append("description", values.description);
             if (values.material) formData.append("material", values.material);
@@ -136,11 +147,8 @@ const EditOrCreateProductForm = ({
               formData.append("categoryId", id);
             if (values.price !== null && values.price !== undefined)
               formData.append("price", String(values.price));
-            formData.append("sizes", JSON.stringify(values.sizes));
-            console.log("first");
+            formData.append("sizes", JSON.stringify(normalizedSizes(values)));
             if (mode === "create") {
-              console.log(true);
-              console.log("formData ", formData);
               await createNewProductByCategory(formData);
             } else {
               if (!productId) throw new Error("Category ID is missing");
@@ -165,12 +173,12 @@ const EditOrCreateProductForm = ({
             <Field
               type="text"
               required
-              name="nameProduct"
+              name="name"
               className={styles.inputField}
               placeholder="Name product"
             />
             <ErrorMessage
-              name="nameProduct"
+              name="name"
               component="div"
               className={styles.errorField}
             />

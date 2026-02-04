@@ -1,9 +1,9 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { PAGES } from "../../config/pages.config";
 import styles from "./styles.module.scss";
 import type { Product } from "../../types";
-import { useCategory } from "../../store/category.store";
 import { memo } from "react";
+import { deleteProductByCategory } from "../../service/auth";
 
 type ProductCardProps = {
   item: Product;
@@ -11,7 +11,6 @@ type ProductCardProps = {
 };
 
 const ProductCard = memo(({ item, handleSelectProduct }: ProductCardProps) => {
-  //   const { name: categoryName } = useCategory();
   console.log(item);
   return (
     <div className={styles.container}>
@@ -19,6 +18,7 @@ const ProductCard = memo(({ item, handleSelectProduct }: ProductCardProps) => {
         className={styles.btnEdit}
         onClick={() => {
           handleSelectProduct({ ...item });
+          // open edit form
         }}
       >
         &#9998;
@@ -26,8 +26,7 @@ const ProductCard = memo(({ item, handleSelectProduct }: ProductCardProps) => {
       <button
         className={styles.btnDelete}
         onClick={() => {
-          if (item.id !== null) return item.id;
-          return;
+          if (item.id !== null) return deleteProductByCategory(item.id);
         }}
       >
         X
@@ -45,7 +44,7 @@ const ProductCard = memo(({ item, handleSelectProduct }: ProductCardProps) => {
           width={100}
           height={100}
         />
-        <h2> {item.nameProduct}</h2>
+        <h2> {item.name}</h2>
       </Link>
     </div>
   );

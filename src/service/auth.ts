@@ -62,17 +62,17 @@ export const updateCategory = async (
 };
 // Products
 export const productsByCategory = async (
-  categoryId: string,
+  categoryId: number,
   signal: AbortSignal,
 ) => {
-  try {
-    const response = await api.get(`products/all/${categoryId}`, {
-      signal,
-    });
-    return response;
-  } catch (error) {
-    throw new Error(`error status : ${error as Error}`);
-  }
+  console.log("start 11");
+  const response = await api.get(`products/all/${categoryId}`, {
+    signal,
+  });
+  console.log("response", response);
+
+  console.log("response", response.data);
+  return response;
 };
 export const createNewProductByCategory = async (data: FormData) => {
   try {
@@ -90,6 +90,13 @@ export const updateProductByCategory = async (
   try {
     const response = await api.patch(`products/${id}`, data, { signal });
     return response;
+  } catch (error) {
+    throw new Error(`error status : ${error as Error}`);
+  }
+};
+export const deleteProductByCategory = async (id: number) => {
+  try {
+    await api.delete(`products/${id}`);
   } catch (error) {
     throw new Error(`error status : ${error as Error}`);
   }

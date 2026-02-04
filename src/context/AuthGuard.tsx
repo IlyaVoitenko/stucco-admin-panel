@@ -5,22 +5,23 @@ import { PAGES } from "../config/pages.config";
 
 const AuthGuard = () => {
   const [isAuthUser, setIsAuthUser] = useState<boolean | null>(null);
+
   useEffect(() => {
-    const isAuth = async () => {
+    const checkAuth = async () => {
       try {
         await IsLogged();
         setIsAuthUser(true);
-      } catch (error) {
+      } catch {
         setIsAuthUser(false);
-        throw new Error(`Error ${error as Error}`);
       }
     };
-    isAuth();
+
+    checkAuth();
   }, []);
+
   if (isAuthUser === null) return null;
-  return (
-    <>{isAuthUser ? <Outlet /> : <Navigate to={PAGES.AUTH_PAGE} replace />}</>
-  );
+
+  return isAuthUser ? <Outlet /> : <Navigate to={PAGES.AUTH_PAGE} replace />;
 };
 
 export default AuthGuard;

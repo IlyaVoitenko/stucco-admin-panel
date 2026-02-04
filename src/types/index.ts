@@ -30,4 +30,5 @@ export interface Product {
   type: typesProduct; // piece, meter
   categoryId: number | null;
   sizes?: PieceSize[] | null;
+  name?: string; // for category link purpose
 }
