@@ -4,7 +4,7 @@ import ErrorComponent from "../ErrorComponent";
 import CardsSkeleton from "../CardsSkeleton";
 import { productsByCategory } from "../../service/auth";
 import { Navigate, useParams } from "react-router-dom";
-import type { Product } from "../../types";
+import type { Product, modeFormsType } from "../../types";
 import { useCategory } from "../../store/category.store";
 import { PAGES } from "../../config/pages.config";
 import EditModal from "../EditModal";
@@ -17,6 +17,7 @@ const ProductsList = () => {
   const [error, setError] = useState<Error | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isShow, setIsShow] = useState<boolean>(false);
+  const [formMode, setFormMode] = useState<modeFormsType>("create");
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   const { listProducts } = useProduct();
   const setListProducts = useProduct().setListProducts;
@@ -39,8 +40,11 @@ const ProductsList = () => {
         setIsLoading(true);
         const response = await productsByCategory(id, controller.signal);
         setListProducts(response.data);
-      } catch (e) {
-        if (axios.isCancel(e) || e.code === "ERR_CANCELED") return;
+      } catch (e: unknown) {
+        if (axios.isCancel(e)) return;
+
+        if (axios.isAxiosError(e) && e.code === "ERR_CANCELED") return;
+
         setError(e as Error);
       } finally {
         setIsLoading(false);
@@ -51,7 +55,6 @@ const ProductsList = () => {
       controller.abort();
     };
   }, [id, setListProducts]);
-
   if (isLoading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   if (!hasWidth && !hasHeight && !hasDepth && !hasDiameter) {
@@ -61,14 +64,16 @@ const ProductsList = () => {
     <div className={styles.container}>
       <h2 className={styles.title}>Products in {categoryName}</h2>
       <button
+        className={styles.btnCreate}
         onClick={() => {
           setIsShow(true);
+          setFormMode("create");
         }}
       >
         Create a new product
       </button>
       <Activity mode={isShow ? "visible" : "hidden"}>
-        <EditModal mode="edit" formMode="product" setIsShow={setIsShow} />
+        <EditModal mode={formMode} formMode="product" setIsShow={setIsShow} />
       </Activity>
       <ul className={styles.listProducts}>
         {listProducts.length ? (
@@ -76,6 +81,7 @@ const ProductsList = () => {
             <li key={product.id}>
               <ProductCard
                 item={product}
+                setFormMode={setFormMode}
                 handleSelectProduct={handleSelectProduct}
               />
             </li>

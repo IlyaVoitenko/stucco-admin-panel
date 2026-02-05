@@ -1,0 +1,27 @@
+.submitButton {
+  background-color: #00952f87;
+  color: rgba(255, 255, 255, 0.712);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.submitButton:hover {
+  background-color: #008f2b75;
+  color: rgba(255, 255, 255, 0.44);
+}
+.btnCreate {
+  background-color: #005ec295;
+  color: rgba(255, 255, 255, 0.834);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btnCreate:hover {
+  background-color: #003976c4;
+  color: rgba(255, 255, 255, 0.674);
+}

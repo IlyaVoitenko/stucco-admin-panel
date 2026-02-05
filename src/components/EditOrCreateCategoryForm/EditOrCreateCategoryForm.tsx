@@ -167,7 +167,11 @@ const EditOrCreateCategoryForm = ({
               Diameter
             </label>
 
-            <button type="submit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={styles.submitButton}
+            >
               {mode === "create" ? "Create category" : "Update category"}
             </button>
           </Form>

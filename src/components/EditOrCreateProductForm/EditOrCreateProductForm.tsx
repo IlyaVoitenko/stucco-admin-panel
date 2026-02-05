@@ -34,8 +34,8 @@ const EditOrCreateProductForm = ({
   } = useProduct();
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   let controller: AbortController | null = null;
-  console.log("error state", error);
-  console.log(isFetchSuccess);
+  console.log("mode", mode);
+  console.log("images", images);
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
@@ -45,20 +45,35 @@ const EditOrCreateProductForm = ({
         <p className={styles.errorField}>Error adding or updating product</p>
       )}
       {mode === "create" &&
+        image.previews.length !== 0 &&
+        image.previews.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            className={styles.imagePreview}
+            alt="preview 1"
+          />
+        ))}
+      {mode === "edit" &&
+        name &&
+        image.previews.length !== 0 &&
+        images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            className={styles.imagePreview}
+            alt="preview 2"
+          />
+        ))}
+      {mode === "edit" &&
         images.length !== 0 &&
         images.map((image, index) => (
           <img
             key={index}
             src={image}
             className={styles.imagePreview}
-            alt="preview"
+            alt="preview 2"
           />
-        ))}
-      {mode === "edit" &&
-        name &&
-        image.previews.length === 0 &&
-        images.map((image) => (
-          <img src={image} className={styles.imagePreview} alt="preview" />
         ))}
       <Formik
         enableReinitialize
@@ -95,7 +110,7 @@ const EditOrCreateProductForm = ({
               formData.append("price", String(values.price));
             formData.append(
               "sizes",
-              JSON.stringify(normalizedSizes(values.sizes)),
+              JSON.stringify(normalizedSizes(values.sizes as PieceSize[])),
             );
             if (mode === "create") {
               await createNewProductByCategory(formData);
@@ -119,8 +134,7 @@ const EditOrCreateProductForm = ({
           }
         }}
       >
-        {({ setFieldValue, isSubmitting, errors }) => {
-          console.log("errors", errors);
+        {({ setFieldValue, isSubmitting }) => {
           return (
             <Form className={styles.formContainer}>
               <Field
@@ -272,7 +286,11 @@ const EditOrCreateProductForm = ({
                   </>
                 )}
               </FieldArray>
-              <button type="submit" disabled={isSubmitting}>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={styles.submitButton}
+              >
                 {mode === "create" ? "Create product" : "Update product"}
               </button>
             </Form>

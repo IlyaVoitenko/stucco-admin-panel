@@ -1,5 +1,5 @@
 @use "../../styles/Layouts/pages" as *;
-
+@use "../../styles/Layouts/components" as *;
 .container {
   @extend .pageContainer;
   justify-content: flex-start;
@@ -7,6 +7,12 @@
   gap: 2rem;
 }
 .listProducts {
+  width: 100%;
   display: flex;
   list-style: none;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.btnCreate {
+  @extend .btnCreate;
 }

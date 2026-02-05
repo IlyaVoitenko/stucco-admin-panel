@@ -1,5 +1,6 @@
 @use "../../styles/Layouts/forms" as *;
 @use "../../styles/Layouts/pages" as *;
+@use "../../styles/Layouts/components" as *;
 .container {
   @extend .container;
   .formContainer {
@@ -10,5 +11,8 @@
   }
   .successMessage {
     @extend .successMessage;
+  }
+  .submitButton {
+    @extend .submitButton;
   }
 }
