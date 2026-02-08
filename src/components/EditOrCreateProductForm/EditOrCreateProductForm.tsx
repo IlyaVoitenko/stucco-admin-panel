@@ -5,6 +5,7 @@ import styles from "./styles.module.scss";
 import {
   createNewProductByCategory,
   updateProductByCategory,
+  productsByCategory,
 } from "../../service/auth";
 import type { modeFormsType, PieceSize } from "../../types";
 import { useProduct } from "../../store/product.store";
@@ -31,11 +32,11 @@ const EditOrCreateProductForm = ({
     type,
     categoryId,
     sizes,
+    setListProducts,
   } = useProduct();
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   let controller: AbortController | null = null;
-  console.log("mode", mode);
-  console.log("images", images);
+
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
@@ -95,8 +96,9 @@ const EditOrCreateProductForm = ({
         validationSchema={getSchema(mode)}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
+            controller = new AbortController();
+
             const formData = new FormData();
-            console.log("values", values);
             if (image.files) formData.append("image", image.files[0]);
             if (values.name) formData.append("name", values.name);
             if (values.description)
@@ -114,9 +116,13 @@ const EditOrCreateProductForm = ({
             );
             if (mode === "create") {
               await createNewProductByCategory(formData);
+              const products = await productsByCategory(
+                Number(id),
+                controller.signal,
+              );
+              setListProducts(products.data);
             } else {
               if (!productId) throw new Error("Category ID is missing");
-              controller = new AbortController();
               await updateProductByCategory(
                 productId,
                 controller.signal,

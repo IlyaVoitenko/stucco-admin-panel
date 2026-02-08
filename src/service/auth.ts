@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
+  baseURL: import.meta.env.VITE_APP_URL_SERVER,
   withCredentials: true,
 });
 api.interceptors.request.use((config) => {
@@ -32,6 +32,10 @@ export const logout = async () => {
   }
 };
 // Categories
+export const getCategories = async () => {
+  const response = await api.get("categories");
+  return response;
+};
 export const createNewCategory = async (data: FormData) => {
   try {
     const response = await api.post("categories", data);
