@@ -7,9 +7,13 @@ export const api = axios.create({
 });
 api.interceptors.request.use((config) => {
   const csrf = Cookies.get("csrfToken");
+
+  console.log("CSRF from cookie:", csrf);
+
   if (csrf) {
-    config.headers["X-CSRF-Token"] = csrf;
+    config.headers["x-csrf-token"] = csrf;
   }
+
   return config;
 });
 
