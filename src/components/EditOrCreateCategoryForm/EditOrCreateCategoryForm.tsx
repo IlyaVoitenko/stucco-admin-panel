@@ -3,7 +3,11 @@ import useImages from "../../hooks/useImages";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import styles from "./styles.module.scss";
-import { createNewCategory, updateCategory } from "../../service/auth";
+import {
+  createNewCategory,
+  getCategories,
+  updateCategory,
+} from "../../service/auth";
 import type { modeFormsType } from "../../types";
 import { useCategory } from "../../store/category.store";
 
@@ -40,6 +44,7 @@ const EditOrCreateCategoryForm = ({
     hasHeight,
     hasDepth,
     hasDiameter,
+    setCategoryList,
   } = useCategory();
 
   return (
@@ -98,10 +103,14 @@ const EditOrCreateCategoryForm = ({
             );
             if (mode === "create") {
               await createNewCategory(formData);
+              const categories = await getCategories();
+              setCategoryList(categories.data);
             } else {
               if (!categoryId) throw new Error("Category ID is missing");
               controller = new AbortController();
               await updateCategory(categoryId, formData, controller.signal);
+              const categories = await getCategories();
+              setCategoryList(categories.data);
             }
             setIsFetchSuccess(true);
             resetForm();

@@ -11,17 +11,20 @@ import type { Category } from "../../types";
 const CategoryListPage = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
   const setSelectedCategory = useCategory().setSelectedCategory;
+  const setCategoryList = useCategory().setCategoryList;
 
   const handleSelectCategory = useCallback(
     (category: Category) => {
       setSelectedCategory(category);
       setIsShow(true);
     },
-    [setSelectedCategory, setIsShow]
+    [setSelectedCategory, setIsShow],
   );
   const { data, loading, error } = useFetch<Category[]>({
     url: "categories",
   });
+
+  if (data) setCategoryList(data);
   if (loading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   return (

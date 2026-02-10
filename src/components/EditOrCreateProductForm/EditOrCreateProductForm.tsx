@@ -128,6 +128,11 @@ const EditOrCreateProductForm = ({
                 controller.signal,
                 formData,
               );
+              const products = await productsByCategory(
+                Number(id),
+                controller.signal,
+              );
+              setListProducts(products.data);
             }
             setIsFetchSuccess(true);
             resetForm();
