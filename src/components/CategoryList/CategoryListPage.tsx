@@ -1,7 +1,7 @@
 import styles from "./styles.module.scss";
 import useFetch from "../../hooks/useFetch";
 import CategoryCard from "../CategoryCard";
-import { Activity, useCallback, useState } from "react";
+import { Activity, useCallback, useEffect, useState } from "react";
 import { useCategory } from "../../store/category.store";
 import EditModal from "../EditModal";
 import ErrorComponent from "../ErrorComponent";
@@ -10,8 +10,7 @@ import type { Category } from "../../types";
 
 const CategoryListPage = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
-  const setSelectedCategory = useCategory().setSelectedCategory;
-  const setCategoryList = useCategory().setCategoryList;
+  const { setSelectedCategory, setCategoryList, categoryList } = useCategory();
 
   const handleSelectCategory = useCallback(
     (category: Category) => {
@@ -23,8 +22,9 @@ const CategoryListPage = () => {
   const { data, loading, error } = useFetch<Category[]>({
     url: "categories",
   });
-
-  if (data) setCategoryList(data);
+  useEffect(() => {
+    setCategoryList(data as Category[]);
+  }, [setCategoryList, data]);
   if (loading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   return (
@@ -32,10 +32,10 @@ const CategoryListPage = () => {
       <Activity mode={isShow ? "visible" : "hidden"}>
         <EditModal mode="edit" formMode="category" setIsShow={setIsShow} />
       </Activity>
-      {!data?.length && <span>Category not found</span>}
+      {!categoryList?.length && <span>Category not found</span>}
       <ul className={styles.listCategories}>
-        {data &&
-          data.map((item: Category) => (
+        {categoryList &&
+          categoryList.map((item: Category) => (
             <li key={item.id}>
               <CategoryCard
                 item={item}
