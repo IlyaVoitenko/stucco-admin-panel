@@ -36,7 +36,7 @@ const EditOrCreateProductForm = ({
   } = useProduct();
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   let controller: AbortController | null = null;
-
+  console.log("image.previews", images);
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
@@ -55,17 +55,13 @@ const EditOrCreateProductForm = ({
             alt="preview 1"
           />
         ))}
-      {mode === "edit" &&
-        name &&
-        image.previews.length !== 0 &&
-        images.map((image, index) => (
-          <img
-            key={index}
-            src={image}
-            className={styles.imagePreview}
-            alt="preview 2"
-          />
-        ))}
+      {mode === "edit" && name && image.previews.length !== 0 && (
+        <img
+          src={image.previews[0]}
+          className={styles.imagePreview}
+          alt="preview 2"
+        />
+      )}
       {mode === "edit" &&
         images.length !== 0 &&
         images.map((image, index) => (

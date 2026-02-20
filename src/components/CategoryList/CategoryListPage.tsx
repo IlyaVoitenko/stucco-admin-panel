@@ -23,8 +23,8 @@ const CategoryListPage = () => {
     url: "categories",
   });
   useEffect(() => {
-    setCategoryList(data as Category[]);
-  }, [setCategoryList, data]);
+    if (data) setCategoryList(data);
+  }, [data, setCategoryList]);
   if (loading) return <CardsSkeleton />;
   if (error) return <ErrorComponent error={error} />;
   return (
