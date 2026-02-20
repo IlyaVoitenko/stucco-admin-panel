@@ -36,7 +36,6 @@ const EditOrCreateProductForm = ({
   } = useProduct();
   const { hasWidth, hasHeight, hasDepth, hasDiameter, id } = useCategory();
   let controller: AbortController | null = null;
-  console.log("image.previews", images);
   return (
     <main className={styles.container}>
       {isFetchSuccess && (
